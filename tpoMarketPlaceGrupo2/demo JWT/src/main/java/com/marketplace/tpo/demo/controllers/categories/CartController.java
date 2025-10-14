@@ -1,14 +1,14 @@
 package com.marketplace.tpo.demo.controllers.categories;
 
-
 import com.marketplace.tpo.demo.entity.Cart;
-import com.marketplace.tpo.demo.entity.User;
 import com.marketplace.tpo.demo.service.CartService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cart")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"})
 public class CartController {
 
     private final CartService cartService;
@@ -17,43 +17,37 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    // 🛒 Ver carrito del usuario autenticado
+    // 🛒 Obtener carrito del usuario autenticado
     @GetMapping
-    public Cart getCart(@AuthenticationPrincipal User user) {
-        return cartService.getCart(user.getId());
+    public Cart getCart(@AuthenticationPrincipal UserDetails userDetails) {
+        return cartService.getCartByEmail(userDetails.getUsername());
     }
 
     // ➕ Agregar producto al carrito
     @PostMapping("/add")
-    public String addToCart(
-            @AuthenticationPrincipal User user,
+    public Cart addToCart(
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long productId,
             @RequestParam(defaultValue = "1") int quantity
     ) {
-        cartService.addToCart(user.getId(), productId, quantity);
-        return "Producto agregado al carrito";
+        return cartService.addToCartByEmail(userDetails.getUsername(), productId, quantity);
     }
 
     // ❌ Eliminar producto del carrito
     @DeleteMapping("/remove/{productId}")
-    public String removeFromCart(
-            @AuthenticationPrincipal User user,
+    public Cart removeFromCart(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long productId
     ) {
-        cartService.removeFromCart(user.getId(), productId);
-        return "Producto eliminado del carrito";
+        return cartService.removeFromCartByEmail(userDetails.getUsername(), productId);
     }
 
     // 🧹 Vaciar carrito
     @DeleteMapping("/clear")
-    public String clearCart(@AuthenticationPrincipal User user) {
-        cartService.clearCart(user.getId());
-        return "Carrito vaciado";
-    }
-
-    // 💰 Total del carrito
-    @GetMapping("/total")
-    public double getTotal(@AuthenticationPrincipal User user) {
-        return cartService.getCart(user.getId()).getTotal();
+    public void clearCart(@AuthenticationPrincipal UserDetails userDetails) {
+        cartService.clearCartByEmail(userDetails.getUsername());
     }
 }
+
+
+
