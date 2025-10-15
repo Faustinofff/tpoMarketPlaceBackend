@@ -42,4 +42,28 @@ public class Cart {
         items.clear();
         total = BigDecimal.ZERO;
     }
+
+    // Sobrescribimos el método toString() para evitar recursión infinita y mostrar información más legible
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cart ID: ").append(id).append(", ");
+        sb.append("User: ").append(user != null ? user.getEmail() : "No User").append(", ");  // Evitar NullPointerException si user es nulo
+        sb.append("Total: ").append(total).append(", ");
+        sb.append("Items: [");
+
+        // Agregamos los items del carrito
+        for (CartItem item : items) {
+            sb.append(item.toString()).append(", ");
+        }
+
+        // Eliminar la última coma y espacio extra
+        if (!items.isEmpty()) {
+            sb.setLength(sb.length() - 2);
+        }
+
+        sb.append("]");
+
+        return sb.toString();
+    }
 }

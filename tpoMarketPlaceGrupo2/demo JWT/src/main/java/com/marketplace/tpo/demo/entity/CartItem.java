@@ -30,7 +30,11 @@ public class CartItem {
     public void increaseQuantity(int amount) {
         this.quantity += amount;
     }
+
+    // Sobrescritura del método toString() para una representación legible
+    @Override
+    public String toString() {
+        return "CartItem [Product: " + (product != null ? product.getName() : "No Product") + ", Quantity: " + quantity + "]";
+    }
 }
-
-
 

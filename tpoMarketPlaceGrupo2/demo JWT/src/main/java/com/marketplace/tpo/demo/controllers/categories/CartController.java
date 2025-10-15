@@ -2,6 +2,8 @@ package com.marketplace.tpo.demo.controllers.categories;
 
 import com.marketplace.tpo.demo.entity.Cart;
 import com.marketplace.tpo.demo.service.CartService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,19 @@ public class CartController {
     public void clearCart(@AuthenticationPrincipal UserDetails userDetails) {
         cartService.clearCartByEmail(userDetails.getUsername());
     }
+    @PostMapping("/checkout")
+public ResponseEntity<String> checkout(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @RequestBody Cart checkoutDetails
+) {
+    System.out.println("Solicitud de compra recibida para el usuario: " + userDetails.getUsername());
+    System.out.println("Detalles del carrito: " + checkoutDetails);
+
+    // Vaciar el carrito del usuario
+    cartService.clearCartByEmail(userDetails.getUsername());
+
+    return ResponseEntity.ok("Compra finalizada y carrito vacío");
+}
 }
 
 
