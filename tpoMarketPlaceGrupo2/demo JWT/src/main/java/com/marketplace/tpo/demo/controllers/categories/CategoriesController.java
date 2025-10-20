@@ -1,30 +1,22 @@
 package com.marketplace.tpo.demo.controllers.categories;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.marketplace.tpo.demo.entity.Category;
 import com.marketplace.tpo.demo.exceptions.CategoryDuplicateException;
 import com.marketplace.tpo.demo.service.CategoryService;
-
 import java.net.URI;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("categories")
+@RequestMapping("/api/v1/categories")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CategoriesController {
 
-    @Autowired // Inyección de dependencias para evitar el "new" que genera cohesion. Delega la creación de objetos a Spring
+    @Autowired
     private CategoryService categoryService;
 
     @GetMapping
@@ -41,7 +33,6 @@ public class CategoriesController {
         Optional<Category> result = categoryService.getCategoryById(categoryId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
-
         return ResponseEntity.noContent().build();
     }
 
@@ -49,6 +40,6 @@ public class CategoriesController {
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
         Category result = categoryService.createCategory(categoryRequest.getDescription());
-        return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);
+        return ResponseEntity.created(URI.create("/api/v1/categories/" + result.getId())).body(result);
     }
 }
