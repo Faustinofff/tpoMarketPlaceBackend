@@ -60,5 +60,31 @@ public class ProductController {
         productRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+    // ✏️ Modificar producto existente
+@PutMapping("/{id}")
+public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
+    return productRepository.findById(id)
+            .map(product -> {
+                // Actualizamos los campos que se reciban en el body
+                if (updatedProduct.getName() != null)
+                    product.setName(updatedProduct.getName());
+                if (updatedProduct.getDescription() != null)
+                    product.setDescription(updatedProduct.getDescription());
+                if (updatedProduct.getPrice() != null)
+                    product.setPrice(updatedProduct.getPrice());
+                if (updatedProduct.getStock() != null)
+                    product.setStock(updatedProduct.getStock());
+                if (updatedProduct.getImageUrl() != null)
+                    product.setImageUrl(updatedProduct.getImageUrl());
+                if (updatedProduct.getCategory() != null)
+                    product.setCategory(updatedProduct.getCategory());
+
+                // Guardamos y devolvemos el producto actualizado
+                Product saved = productRepository.save(product);
+                return ResponseEntity.ok(saved);
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
+
 }
 
