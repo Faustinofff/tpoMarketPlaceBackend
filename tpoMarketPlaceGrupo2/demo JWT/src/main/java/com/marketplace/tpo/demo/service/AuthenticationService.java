@@ -17,12 +17,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-        private final UserRepository repository;  // Repositorio de usuarios en el que se verifica si el usuario existe en la base de datos (por email)
-        private final PasswordEncoder passwordEncoder;   //Hashea nuestras contraseñas antes de guardarlas
-        private final JwtService jwtService;            //se encarga de generar y validar los tokens JWT
-        private final AuthenticationManager authenticationManager;   //se encarga de autenticar a los usuarios
+        private final UserRepository repository;  
+        private final PasswordEncoder passwordEncoder;   
+        private final JwtService jwtService;            
+        private final AuthenticationManager authenticationManager;   
 
-        public AuthenticationResponse register(RegisterRequest request) {  // Maneja el registro de nuevos usuarios y lo guarda en la base de datos
+        public AuthenticationResponse register(RegisterRequest request) {  
                 var user = User.builder()
                                 .firstName(request.getFirstname())
                                 .lastName(request.getLastname())
@@ -34,7 +34,7 @@ public class AuthenticationService {
                 repository.save(user);
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
-                                .accessToken(jwtToken)  //se le devuelve token generado (en la clase JWTService) al usuario
+                                .accessToken(jwtToken)  
                                 .build();
         }
 
@@ -47,7 +47,7 @@ public class AuthenticationService {
                                 .orElseThrow();
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
-                                .accessToken(jwtToken)  //se devuelve un token cada vez que el usuario inicia sesión
+                                .accessToken(jwtToken)  
                                 .build();
         }
 }

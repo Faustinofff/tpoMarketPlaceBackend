@@ -20,13 +20,13 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    // 📦 Listar productos
+    
     @GetMapping
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    // 🔍 Buscar por ID
+    
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return productRepository.findById(id)
@@ -34,13 +34,13 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ➕ Crear producto (con o sin URL de imagen)
+    
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
 
-    // 🖼️ Subir imagen (guarda la URL en el producto)
+    
     @PostMapping("/{id}/image")
     public ResponseEntity<Product> uploadImage(
             @PathVariable Long id,
@@ -53,14 +53,14 @@ public class ProductController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // 🗑️ Eliminar producto
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         if (!productRepository.existsById(id)) return ResponseEntity.notFound().build();
         productRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    // ✏️ Modificar producto existente
+    
 @PutMapping("/{id}")
 public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
     return productRepository.findById(id)
@@ -79,7 +79,7 @@ public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody
                 if (updatedProduct.getCategory() != null)
                     product.setCategory(updatedProduct.getCategory());
 
-                // Guardamos y devolvemos el producto actualizado
+                
                 Product saved = productRepository.save(product);
                 return ResponseEntity.ok(saved);
             })

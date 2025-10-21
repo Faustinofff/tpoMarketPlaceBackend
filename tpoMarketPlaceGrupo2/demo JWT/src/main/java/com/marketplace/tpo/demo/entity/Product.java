@@ -27,7 +27,7 @@ public class Product {
     @Column
     private String imageUrl;
 
-    // ✅ Cambiamos a @ManyToOne (una categoría → muchos productos)
+    
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

@@ -13,12 +13,12 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ✅ Relación con el producto
+    
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // ✅ Relación con el carrito (evita recursión infinita al serializar)
+    
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
     @JsonBackReference
@@ -31,7 +31,7 @@ public class CartItem {
         this.quantity += amount;
     }
 
-    // Sobrescritura del método toString() para una representación legible
+    
     @Override
     public String toString() {
         return "CartItem [Product: " + (product != null ? product.getName() : "No Product") + ", Quantity: " + quantity + "]";

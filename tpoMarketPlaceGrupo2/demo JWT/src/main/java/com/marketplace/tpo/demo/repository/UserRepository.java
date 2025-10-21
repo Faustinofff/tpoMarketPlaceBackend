@@ -9,5 +9,5 @@ import com.marketplace.tpo.demo.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String mail);  // Busca un usuario por su correo electrónico
+    Optional<User> findByEmail(String mail); 
 }

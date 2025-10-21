@@ -12,8 +12,8 @@ import com.marketplace.tpo.demo.entity.Category;
 import com.marketplace.tpo.demo.exceptions.CategoryDuplicateException;
 import com.marketplace.tpo.demo.repository.CategoryRepository;
 
-@Service //se declara el bean servicio para que Spring pueda inyectarlo 
-public class CategoryServiceImpl implements CategoryService {  // Implementación de la interfaz CategoryService y sus metodos
+@Service 
+public class CategoryServiceImpl implements CategoryService {  
 
     @Autowired
     private CategoryRepository categoryRepository;

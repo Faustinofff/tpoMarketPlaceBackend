@@ -7,17 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,17 +24,16 @@ public class User implements UserDetails {
     private Long id;
 
     private String email;
-
     private String name;
-
     private String password;
-
     private String firstName;
 
     @Column(nullable = false)
     private String lastName;
 
+    
     @OneToMany(mappedBy = "user")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private List<Order> orders;
 
     @Enumerated(EnumType.STRING)
@@ -52,10 +41,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
-}
-
-
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+    }
 
     @Override
     public String getUsername() {

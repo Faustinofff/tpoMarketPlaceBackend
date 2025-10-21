@@ -14,8 +14,7 @@ public class Category {
     @Column(nullable = false)
     private String description;
 
-    // 👇 Ya no tiene referencia directa al producto
-    // (evitamos bucles y simplificamos la relación)
+    
 
     public Category() {}
 

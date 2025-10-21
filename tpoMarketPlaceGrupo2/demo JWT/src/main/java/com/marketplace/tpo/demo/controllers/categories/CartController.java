@@ -19,13 +19,13 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    // 🛒 Obtener carrito del usuario autenticado
+    
     @GetMapping
     public Cart getCart(@AuthenticationPrincipal UserDetails userDetails) {
         return cartService.getCartByEmail(userDetails.getUsername());
     }
 
-    // ➕ Agregar producto al carrito
+    
     @PostMapping("/add")
     public Cart addToCart(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -35,7 +35,7 @@ public class CartController {
         return cartService.addToCartByEmail(userDetails.getUsername(), productId, quantity);
     }
 
-    // ❌ Eliminar producto del carrito
+    
     @DeleteMapping("/remove/{productId}")
     public Cart removeFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -44,7 +44,7 @@ public class CartController {
         return cartService.removeFromCartByEmail(userDetails.getUsername(), productId);
     }
 
-    // 🧹 Vaciar carrito
+    
     @DeleteMapping("/clear")
     public void clearCart(@AuthenticationPrincipal UserDetails userDetails) {
         cartService.clearCartByEmail(userDetails.getUsername());
@@ -57,7 +57,7 @@ public ResponseEntity<String> checkout(
     System.out.println("Solicitud de compra recibida para el usuario: " + userDetails.getUsername());
     System.out.println("Detalles del carrito: " + checkoutDetails);
 
-    // Vaciar el carrito del usuario
+    
     cartService.clearCartByEmail(userDetails.getUsername());
 
     return ResponseEntity.ok("Compra finalizada y carrito vacío");

@@ -20,25 +20,25 @@ public class CartService {
         this.userRepository = userRepository;
     }
 
-    // 🛒 Obtener carrito del usuario
+    
     public Cart getCart(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         return cartRepository.findByUser(user)
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
                     newCart.setUser(user);
-                    // ⚠️ Guardamos y forzamos el flush para obtener ID inmediato
+                    
                     return cartRepository.saveAndFlush(newCart);
                 });
     }
 
-    // ➕ Agregar producto al carrito
+    
     public Cart addToCart(Long userId, Long productId, int quantity) {
         Cart cart = getCart(userId);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        // ✅ Si el carrito aún no tiene ID, lo guardamos y flusheamos
+        
         if (cart.getId() == null) {
             cart = cartRepository.saveAndFlush(cart);
         }
@@ -57,7 +57,7 @@ public class CartService {
             cart.getItems().add(item);
         }
 
-        // 💰 Calcular total con BigDecimal
+        
         BigDecimal totalBD = cart.getItems().stream()
                 .map(i -> i.getProduct().getPrice()
                         .multiply(BigDecimal.valueOf(i.getQuantity())))
@@ -65,11 +65,11 @@ public class CartService {
 
         cart.setTotal(totalBD);
 
-        // ✅ Guardar y flushear para garantizar persistencia total
+        
         return cartRepository.saveAndFlush(cart);
     }
 
-    // ❌ Eliminar producto del carrito
+    
     public Cart removeFromCart(Long userId, Long productId) {
         Cart cart = getCart(userId);
         cart.getItems().removeIf(i -> i.getProduct().getId().equals(productId));
@@ -83,7 +83,7 @@ public class CartService {
         return cartRepository.saveAndFlush(cart);
     }
 
-    // 🧹 Vaciar carrito
+    
     public void clearCart(Long userId) {
         Cart cart = getCart(userId);
         cart.getItems().clear();
@@ -91,9 +91,7 @@ public class CartService {
         cartRepository.saveAndFlush(cart);
     }
 
-    // ------------------------------------------------------------------------
-    // 🔽 Métodos alternativos por email (opcional, si trabajás con UserDetails)
-    // ------------------------------------------------------------------------
+    
 
     public Cart getCartByEmail(String email) {
         User user = userRepository.findByEmail(email)

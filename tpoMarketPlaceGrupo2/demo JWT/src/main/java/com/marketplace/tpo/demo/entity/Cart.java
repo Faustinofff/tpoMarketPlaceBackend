@@ -10,19 +10,19 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "carts") // ✅ Asegura el nombre de tabla correcto
+@Table(name = "carts") 
 public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 👇 Relación uno a uno con User (con FK explícita)
+    
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    // 👇 Relación con los ítems del carrito + evita recursión infinita
+    
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<CartItem> items = new ArrayList<>();
@@ -43,21 +43,21 @@ public class Cart {
         total = BigDecimal.ZERO;
     }
 
-    // Sobrescribimos el método toString() para evitar recursión infinita y mostrar información más legible
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Cart ID: ").append(id).append(", ");
-        sb.append("User: ").append(user != null ? user.getEmail() : "No User").append(", ");  // Evitar NullPointerException si user es nulo
+        sb.append("User: ").append(user != null ? user.getEmail() : "No User").append(", ");  
         sb.append("Total: ").append(total).append(", ");
         sb.append("Items: [");
 
-        // Agregamos los items del carrito
+        
         for (CartItem item : items) {
             sb.append(item.toString()).append(", ");
         }
 
-        // Eliminar la última coma y espacio extra
+        
         if (!items.isEmpty()) {
             sb.setLength(sb.length() - 2);
         }
