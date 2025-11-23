@@ -26,27 +26,30 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        
+
+                        // 🔓 ENDPOINTS DE AUTENTICACIÓN
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
-                        
+                        // 🔐 CARRITO
                         .requestMatchers("/api/v1/cart/**").hasRole("USER")
 
-                        
+                        // 🔐 CHECKOUT (💥 AGREGAR ESTA LÍNEA)
+                        .requestMatchers("/api/v1/orders/**").hasAnyRole("USER", "ADMIN")
+
+                        // 🔐 PRODUCTOS
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-                        
                         .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasAnyRole("SELLER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasAnyRole("SELLER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
 
-                        
+                        // 🔐 CATEGORÍAS
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
 
-                        
+                        // 🔐 USUARIOS
                         .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
 
-                        
+                        // 🔐 CUALQUIER OTRO REQUIERE AUTH
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
