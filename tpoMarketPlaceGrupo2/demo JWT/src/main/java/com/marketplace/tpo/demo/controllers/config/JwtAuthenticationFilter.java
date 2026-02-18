@@ -84,3 +84,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+
+// Explicación:
+// Este filtro intercepta cada solicitud HTTP para verificar la presencia y validez de un token JWT
+// en el header "Authorization". Si el token es válido, autentica al usuario en el contexto de seguridad
+// de Spring, permitiendo el acceso a los endpoints protegidos según los roles definidos. 
+
