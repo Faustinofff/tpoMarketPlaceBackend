@@ -2,6 +2,7 @@ package com.marketplace.tpo.demo.controllers.categories;
 
 import com.marketplace.tpo.demo.entity.Order;
 import com.marketplace.tpo.demo.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +15,8 @@ import java.util.Map;
 @CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"})
 public class OrderController {
 
-    private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/checkout")
     public ResponseEntity<Order> checkout(
